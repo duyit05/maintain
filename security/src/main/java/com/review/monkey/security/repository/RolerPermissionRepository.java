@@ -1,0 +1,18 @@
+package com.review.monkey.security.repository;
+
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import com.review.monkey.security.model.mapping.RolePermission;
+
+public interface RolerPermissionRepository extends JpaRepository<RolePermission, Integer> {
+    @Query("select r from role_permission r  where r.role.roleId = ?1 and r.permission.permissionId = ?2")
+    Optional<RolePermission> findByRoleAndPermission(String roleid, String permissionId);
+
+    @Query(
+            "select r from role_permission r where r.role.roleId = ?1 and r.permission.permissionId = ?2 and r.rolePermissionId <> ?3")
+    Optional<RolePermission> findRoleAndPermissionAndRolePermissionId(
+            int rolePermissionId, String roleId, String permissionId);
+}
